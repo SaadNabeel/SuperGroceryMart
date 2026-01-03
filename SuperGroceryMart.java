@@ -276,3 +276,109 @@ System.out.println("Invalid choice");
 }
 }
 }
+static void viewCustomers() {
+System.out.println("Name\tPhone\tEmail\tPoints");
+for (Customer c : customers) System.out.println(c.toString());
+}
+
+static void addCustomer() {
+System.out.print("Name: "); String n = sc.nextLine();
+System.out.print("Phone: "); String ph = sc.nextLine();
+System.out.print("Email: "); String em = sc.nextLine();
+customers.add(new Customer(n, ph, em, 0));
+System.out.println("Customer added.");
+}
+
+static void editCustomer() {
+System.out.print("Enter customer name to edit: "); String name = sc.nextLine();
+for (Customer c : customers) {
+if (c.name.equalsIgnoreCase(name)) {
+System.out.print("New phone: "); c.phone = sc.nextLine();
+System.out.print("New email: "); c.email = sc.nextLine();
+System.out.println("Updated.");
+return;
+}
+}
+System.out.println("Not found.");
+}
+static void deleteCustomer() {
+System.out.print("Customer name: "); String name = sc.nextLine();
+customers.removeIf(c -> c.name.equalsIgnoreCase(name));
+System.out.println("Deleted if existed.");
+}
+
+static void loadSales() {}
+
+static void saveSale(String data) {
+try (PrintWriter pw = new PrintWriter(new FileWriter(SALES_FILE, true))) {
+pw.println(data);
+pw.println("======= ====");
+} catch (Exception e) {}
+}
+static void sellProduct(User user) {
+double total = 0;
+System.out.print("Enter Customer Name: "); String custName = sc.nextLine();
+Customer customer = null;
+for (Customer c : customers) if (c.name.equalsIgnoreCase(custName)) customer = c;
+if (customer == null) System.out.println("Customer not found. Will continue without loyalty.");
+StringBuilder bill = new StringBuilder();
+int invoiceNo = invoiceCounter++;
+bill.append("Invoice#: ").append(invoiceNo).append("\n");
+bill.append("Cashier: ").append(user.username).append("\n");
+bill.append("Date: ").append(LocalDateTime.now()).append("\n");
+bill.append("Item\tQty\tPrice\tTotal\n");
+while (true) {
+System.out.print("Product ID (0 to finish): "); int id = sc.nextInt();
+if (id == 0) break;
+Product p = null;
+for (Product pr : products) if (pr.id == id) p = pr;
+if (p == null) { System.out.println("Not found"); continue; }
+System.out.print("Qty: "); int q = sc.nextInt();
+if (q > p.quantity) { System.out.println("Insufficient stock"); continue; }
+double cost = q * p.price;
+p.quantity -= q;
+total += cost;
+bill.append(p.name).append("\t").append(q).append("\t").append(p.price).append("\t").append(cost).append("\n");
+}
+static void userMenu() {
+while (true) {
+System.out.println("\n1.View Users 2.Add 3.Delete 4.Back");
+int ch = sc.nextInt(); sc.nextLine();
+switch (ch) {
+case 1:
+for (User u : users.values()) System.out.println(u.toString());
+break;
+case 2:
+addUser();
+break;
+case 3:
+deleteUser();
+break;
+case 4:
+saveUsers();
+return;
+default:
+System.out.println("Invalid choice");
+}
+}
+}
+static void addUser() {
+System.out.print("Username: "); String u = sc.nextLine();
+if (users.containsKey(u)) { System.out.println("Exists"); return; }
+System.out.print("Password: "); String p = sc.nextLine();
+System.out.print("Role: "); String r = sc.nextLine();
+users.put(u, new User(u, p, r));
+System.out.println("User added.");
+}
+
+static void deleteUser() {
+System.out.print("Username: "); String u = sc.nextLine();
+if (users.containsKey(u)) { users.remove(u); System.out.println("Removed"); return; }
+System.out.println("Not found");
+}
+
+static void changePassword(User user) {
+System.out.print("New Password: "); String np = sc.nextLine();
+user.password = np;
+System.out.println("Changed.");
+}
