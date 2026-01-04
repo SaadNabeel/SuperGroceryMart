@@ -382,3 +382,79 @@ System.out.print("New Password: "); String np = sc.nextLine();
 user.password = np;
 System.out.println("Changed.");
 }
+static void salesReportMenu() {
+while (true) {
+System.out.println("\n1. Daily Sales 2. Monthly Sales 3. Back");
+int ch = sc.nextInt(); sc.nextLine();
+switch (ch) {
+case 1:
+System.out.println("Daily sales feature placeholder");
+break;
+case 2:
+System.out.println("Monthly sales feature placeholder");
+break;
+case 3:
+return;
+default:
+System.out.println("Invalid choice");
+}
+}
+}
+
+static void saveAll() {
+saveProducts(); saveUsers(); saveCustomers();
+System.out.println("All data saved.");
+}
+static class Product {
+int id; String name; double price; int quantity; String category; LocalDate expiry;
+Product(int id, String n, double p, int q, String c, LocalDate e) {
+this.id = id; name = n; price = p; quantity = q;
+category = c; expiry = e;
+}
+public String toString() {
+return id + "," + name + "," + price + "," + quantity + "," + category + "," + (expiry == null ? "NA" : expiry.toString());
+}
+public String display() {
+return id + "\t" + name + "\t" + price + "\t" + quantity + "\t" + category + "\t" + (expiry == null ? "NA" : expiry.toString());
+}
+}
+
+static class BundleOffer {
+String name; ArrayList<Integer> productIds; double price;
+BundleOffer(String n, ArrayList<Integer> pids, double price) {
+this.name = n; this.productIds = pids;
+this.price = price;
+}
+public String toString() {
+return "Bundle: " + name + " | Price: " + price + " | Products: " + productIds;
+}
+}
+
+static class Sale {
+int invoiceNo; String cashier; LocalDateTime datetime; double amount;
+Sale(int i, String c, LocalDateTime dt, double amt) {
+invoiceNo = i; cashier = c; datetime = dt; amount = amt;
+}
+public String toString() {
+return "Invoice#" + invoiceNo + " | " + cashier + " | " + datetime + " | " + amount;
+}
+}
+static class User {
+String username, password, role;
+User(String u, String p, String r) {
+username = u; password = p; role = r;
+}
+public String toString() {
+return username + " | " + role;
+}
+}
+
+static class Customer {
+String name, phone, email; int points;
+Customer(String n, String ph, String em, int pts) {
+name = n; phone = ph; email = em; points = pts;
+}
+public String toString() {
+return name + "\t" + phone + "\t" + email + "\t" + points;
+}
+}
